@@ -3,19 +3,24 @@ package org.example;
 import java.time.LocalDate;
 
 public class Task {
-    private final String name;
-    private final LocalDate whenAdded = LocalDate.now();
-    private boolean done = false;
-
+    private String name;
+    private LocalDate whenAdded;
+    private boolean done;
     private LocalDate deadline;
+
+    public  Task() {}
 
     public Task(String name, LocalDate deadline){
     this.name = name;
     this.deadline = deadline;
+    this.whenAdded = LocalDate.now();
+    this.done = false;
     }
 
     public Task(String name){
         this.name = name;
+        this.whenAdded = LocalDate.now();
+        this.done = false;
     }
 
     public String getName() {
@@ -34,13 +39,13 @@ public class Task {
         return deadline;
     }
 
+    public void setDeadline(LocalDate deadline){
+        this.deadline = deadline;
+    }
+
     public void markAsDone() {
         this.done = true;
         System.out.println("Task "+getName()+" has been completed");
-    }
-
-    public void setDeadline(LocalDate deadline) {
-        this.deadline = deadline;
     }
 
 }

@@ -1,11 +1,21 @@
 package org.example;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ConsoleUI {
+    private final TaskManager manager;
+    private final TaskStorage storage;
+    private final String filepath;
     private final Scanner scanner = new Scanner(System.in);
-    private final TaskManager taskManager = new TaskManager();
+    boolean run = true;
+
+    public ConsoleUI(TaskManager manager, TaskStorage storage, String filepath) {
+        this.manager = manager;
+        this.storage = storage;
+        this.filepath = filepath;
+    }
 
     private static void setDeadline(Task task, Scanner scanner) {
         try {
@@ -18,8 +28,18 @@ public class ConsoleUI {
         }
     }
 
+    private void saveTasksToFile(){
+        try {
+            storage.saveTasks(manager.getTaskList(), filepath);
+            System.out.println("Tasks saved successfully");
+        } catch (IOException e) {
+            System.out.println("Error saving tasks: " +e.getMessage());
+        }
+    }
+
+
     public void start() {
-        while (true) {
+        while (run) {
             System.out.println();
             System.out.println("Select the number with the appropriate option");
             System.out.println("1. Add task");
@@ -36,7 +56,7 @@ public class ConsoleUI {
                     System.out.println("Enter a name for the task");
                     String name = scanner.nextLine();
                     Task task = new Task(name);
-                    taskManager.addTask(task);
+                    manager.addTask(task);
 
                     System.out.println("Would you like to add a deadline? Y/N");
                     option = scanner.nextLine();
@@ -50,23 +70,23 @@ public class ConsoleUI {
                     System.out.println("Which task do you want to delete");
                     int index = scanner.nextInt();
                     scanner.nextLine();
-                    task = taskManager.getTaskbyIndex(index);
+                    task = manager.getTaskbyIndex(index);
                     if (task != null) {
-                        taskManager.removeTaskByIndex(index);
+                        manager.removeTaskByIndex(index);
                     } else {
                         System.out.println("Invalid index");
                     }
                     break;
 
                 case "3":
-                    taskManager.listTasks();
+                    manager.listTasks();
                     break;
 
                 case "4":
                     System.out.println("Which task would you like to mark as done?");
                     int indexDone = scanner.nextInt();
                     scanner.nextLine();
-                    task = taskManager.getTaskbyIndex(indexDone);
+                    task = manager.getTaskbyIndex(indexDone);
                     if (task != null) {
                         task.markAsDone();
                     }
@@ -77,7 +97,7 @@ public class ConsoleUI {
                     System.out.println("Which task do you want to add a deadline to?");
                     int indexDeadline = scanner.nextInt();
                     scanner.nextLine();
-                    task = taskManager.getTaskbyIndex(indexDeadline);
+                    task = manager.getTaskbyIndex(indexDeadline);
                     if (task != null) {
                         setDeadline(task, scanner);
                     } else {
@@ -87,8 +107,13 @@ public class ConsoleUI {
                     break;
 
                 case "0":
+                    saveTasksToFile();
                     System.out.println("See you later!");
-                    return;
+                    run = false;
+                    break;
+
+                    default:
+                    throw new IllegalStateException("Unexpected value: " + option);
             }
         }
 

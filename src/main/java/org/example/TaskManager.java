@@ -10,8 +10,8 @@ public class TaskManager {
         taskList.add(task);
     }
 
-    public void removeTask(Task task){
-        taskList.remove(task);
+    public List<Task> getTaskList() {
+        return taskList;
     }
 
     public void listTasks(){
