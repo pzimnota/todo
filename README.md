@@ -1,6 +1,13 @@
 # ToDo Console Application
 
 A simple console-based ToDo application written in Java.
+## Table of Contents
+- [Features](#features)
+- [Dependencies](#dependencies)
+- [How to Run](#how-to-run)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+
 
 ## Features
 
